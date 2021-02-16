@@ -1,0 +1,14 @@
+[http_server]
+host = "0.0.0.0"
+port = 7011
+
+[database]
+type = "mysql"
+host = "0.0.0.0"
+port = 3317
+username = "root"
+password = ""
+dbname = "gameObjectBackend"
+
+[token_manager]
+secret = "WHOCANINHERITEDTHEDREAM0515"
