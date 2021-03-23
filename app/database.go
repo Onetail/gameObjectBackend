@@ -45,6 +45,11 @@ func (database *Database) Init() {
 	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.UserLogin{})
 	db.AutoMigrate(&model.Attachment{})
+
+	user1 := &model.User{Nickname: "test", PhoneNumber: "0909009698"}
+ 	user2 := &model.User{Nickname: "test2", PhoneNumber: "123456789"}
+	db.Create(&user1)
+	db.Create(&user2)
 }
 
 func (database *Database) GetDb() *gorm.DB {
