@@ -1,0 +1,180 @@
+definitions:
+  model.CreateUserBody:
+    properties:
+      birthday:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+      nickname:
+        type: string
+      password:
+        type: string
+      phoneCountryCode:
+        type: string
+      phoneNumber:
+        type: string
+      region:
+        type: string
+    required:
+    - birthday
+    - email
+    - gender
+    - nickname
+    - password
+    - phoneCountryCode
+    - phoneNumber
+    type: object
+  model.UpdateUserBody:
+    properties:
+      birthday:
+        type: string
+      nickname:
+        type: string
+    type: object
+  model.User:
+    properties:
+      birthday:
+        type: string
+      createdAt:
+        type: string
+      gender:
+        type: string
+      id:
+        type: string
+      nickname:
+        type: string
+      phoneCountryCode:
+        type: string
+      phoneNumber:
+        type: string
+      region:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: localhost:7011
+info:
+  contact:
+    name: WayneChu
+    url: https://github.com/Onetail
+  description: Gin swagger api docs
+  license:
+    name: Nginx
+    url: https://www.nginx.com/
+  title: GameObjectBackend
+  version: 1.0.0
+paths:
+  /api/v1/users/:
+    get:
+      consumes:
+      - application/json
+      description: 取得 user 列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/model.User'
+        "403":
+          description: err.Error()
+          schema:
+            type: string
+      summary: Get user list
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: 新增 user
+      parameters:
+      - description: 參數
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUserBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: create user
+      tags:
+      - users
+  /api/v1/users/:userId:
+    delete:
+      consumes:
+      - application/json
+      description: 刪除 user
+      parameters:
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: delete user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: 取得單一 user
+      parameters:
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/model.User'
+        "404":
+          description: record not found
+          schema:
+            type: string
+      summary: Get user by userId
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: 更新 user
+      parameters:
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: 參數
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateUserBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: update user
+      tags:
+      - users
+swagger: "2.0"

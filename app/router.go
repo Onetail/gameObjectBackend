@@ -4,9 +4,13 @@ import (
 	"log"
 	"strconv"
 
+	_ "gameObjectBackend/docs"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type HTTPServer struct {
@@ -24,6 +28,10 @@ func (hs *HTTPServer) Init(app *App) {
 
 	// Initializing HTTP server
 	hs.engine = gin.Default()
+
+	url := ginSwagger.URL("/swagger/doc.json")
+	hs.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
 	corsConfig.AllowMethods = append(corsConfig.AllowMethods, "DELETE")

@@ -32,14 +32,22 @@ func (u *Users) Init(server *app.HTTPServer) {
 
 }
 
+// @tags users
+// @Summary Get user list
+// @Description 取得 user 列表
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.User string "ok"
+// @Failure 403 {object} string "err.Error()"
+// @Router /api/v1/users/ [get]
 func (u *Users) GetUsers(c *gin.Context) {
 	var users []model.User
 
 	db := u.app.Database.GetDb()
 
 	if err := db.Find(&users).Error; err != nil {
-		c.AbortWithStatus(404)
-		fmt.Print(err.Error())
+		c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -48,6 +56,15 @@ func (u *Users) GetUsers(c *gin.Context) {
 
 }
 
+// @tags users
+// @Summary Get user by userId
+// @Description 取得單一 user
+// @Accept  json
+// @Produce  json
+// @Param userId path string true "user id"
+// @Success 200 {object} model.User string "ok"
+// @Failure 404 {object}  string "record not found"
+// @Router /api/v1/users/:userId [get]
 func (u *Users) GetUserByUserId(c *gin.Context) {
 
 	var user model.User
@@ -56,7 +73,7 @@ func (u *Users) GetUserByUserId(c *gin.Context) {
 	db := u.app.Database.GetDb()
 
 	if err := db.Where("id=?", userId).First(&user).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "user email already exist"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "record not found"})
 		return
 	}
 
@@ -66,6 +83,14 @@ func (u *Users) GetUserByUserId(c *gin.Context) {
 
 }
 
+// @tags users
+// @Summary create user
+// @Description 新增 user
+// @Accept  json
+// @Produce  json
+// @Param body body model.CreateUserBody true "參數"
+// @Success 200 {object} model.User string "ok"
+// @Router /api/v1/users/ [post]
 func (u *Users) PostUser(c *gin.Context) {
 	var user model.User
 	var userLogin model.UserLogin
@@ -106,6 +131,16 @@ func (u *Users) PostUser(c *gin.Context) {
 		"data": &user,
 	})
 }
+
+// @tags users
+// @Summary update user
+// @Description 更新 user
+// @Accept  json
+// @Produce  json
+// @Param userId path string true "user id"
+// @Param body body model.UpdateUserBody true "參數"
+// @Success 200 {object} model.User string "ok"
+// @Router /api/v1/users/:userId [patch]
 func (u *Users) UpdateUserByUserId(c *gin.Context) {
 	var user model.User
 	var body model.UpdateUserBody
@@ -133,6 +168,15 @@ func (u *Users) UpdateUserByUserId(c *gin.Context) {
 	})
 
 }
+
+// @tags users
+// @Summary delete user
+// @Description 刪除 user
+// @Accept  json
+// @Produce  json
+// @Param userId path string true "user id"
+// @Success 200 {object} model.User string "ok"
+// @Router /api/v1/users/:userId [delete]
 func (u *Users) DeleteUserByUserId(c *gin.Context) {
 	var user model.User
 	database := u.app.Database.GetDb()
