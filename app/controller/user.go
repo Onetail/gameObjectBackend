@@ -56,8 +56,8 @@ func (u *Users) GetUserByUserId(c *gin.Context) {
 	db := u.app.Database.GetDb()
 
 	if err := db.Where("id=?", userId).First(&user).Error; err != nil {
-		c.AbortWithStatus(404)
-		fmt.Print(err.Error())
+		c.JSON(http.StatusNotFound, gin.H{"error": "user email already exist"})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -73,28 +73,22 @@ func (u *Users) PostUser(c *gin.Context) {
 	database := u.app.Database.GetDb()
 	transaction := database.Begin()
 
-	// body, err := json.Marshal(body)
-	// if err != nil {
-	// }
 	err := c.ShouldBindJSON(&body)
 	if err != nil {
-		c.AbortWithStatus(400)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err = database.Where("email=?", body.Email).First(&userLogin).Error
 	if err == nil {
-		c.AbortWithStatus(403)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user email already exist"})
+		c.JSON(http.StatusForbidden, gin.H{"error": "user email already exist"})
 		return
 	}
 
 	err = database.Model(&user).Create(&model.User{Nickname: body.Nickname, Birthday: body.Birthday, PhoneCountryCode: body.PhoneCountryCode, PhoneNumber: body.PhoneNumber, Gender: body.Gender, Region: body.Region}).Error
 	if err != nil {
 		transaction.Rollback()
-		c.AbortWithStatus(403)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 	}
 
 	h := hmac.New(sha256.New, []byte(viper.GetString("token_manager.secret")))
@@ -103,8 +97,7 @@ func (u *Users) PostUser(c *gin.Context) {
 	err = database.Model(&userLogin).Create(&model.UserLogin{Email: body.Email, Password: string(password[:])}).Error
 	if err != nil {
 		transaction.Rollback()
-		c.AbortWithStatus(403)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 	}
 
 	transaction.Commit()
@@ -130,8 +123,9 @@ func (u *Users) UpdateUserByUserId(c *gin.Context) {
 	}
 
 	if err := database.Model(&user).Update(body).Error; err != nil {
-		c.AbortWithStatus(404)
+		c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
 		fmt.Println(err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -141,14 +135,16 @@ func (u *Users) UpdateUserByUserId(c *gin.Context) {
 }
 func (u *Users) DeleteUserByUserId(c *gin.Context) {
 	var user model.User
-	// var userRaw model.UpdateUserBody;
-	// userRaw, err:= c.GetRawData()
-	// if err != nil {}
-
-	// log.Print(string(userRaw))
 	database := u.app.Database.GetDb()
+	userId := c.Params.ByName("userId")
 
-	result := database.Find(&user)
+	err := database.Where("id = ?", userId).First(&user).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	result := database.Delete(&user)
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": result,
