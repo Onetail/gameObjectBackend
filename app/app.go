@@ -3,12 +3,13 @@ package app
 import (
 	"fmt"
 	"os"
+
 	"github.com/spf13/viper"
 )
 
 type App struct {
 	HTTPServer *HTTPServer
-	Database *Database
+	Database   *Database
 }
 
 func (app *App) Init() {
