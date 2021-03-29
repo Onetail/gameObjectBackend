@@ -5,7 +5,7 @@ services:
 
   # App Service
   app:
-    container_name: gameObjectBackend-app
+    container_name: game_object_backend-app
     build:
       context: . # Use an image built from the specified dockerfile in the current directory.
       dockerfile: docker/golang/Dockerfile
@@ -15,13 +15,13 @@ services:
     environment: 
       GO_ENV: production
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
-      - gameObjectBackend
+      - game_object_backend
   
-  gameObjectBackend-mysql:
+  game_object_backend-mysql:
     build:
       context: .
       dockerfile: docker/mysql/Dockerfile
-    container_name: gameObjectBackend-mysql
+    container_name: game_object_backend-mysql
     command: mysqld --default-authentication-plugin=mysql_native_password --sql_mode=""
     volumes:
       - ./sql/gameObjectBackend.sql:/docker-entrypoint-initdb.d/gameObjectBackend.sql
@@ -30,7 +30,7 @@ services:
     ports:
       - "3317:3306"    
     networks:
-      - gameObjectBackend
+      - game_object_backend
 
 networks:
-  gameObjectBackend:   
+  game_object_backend:   
