@@ -5,9 +5,9 @@ port = 7019
 [database]
 type = "mysql"
 host = "0.0.0.0"
-port = 3317
+port = 3306
 username = "root"
-password = ""
+password = "root"
 dbname = "gameObjectBackend"
 
 [token_manager]
