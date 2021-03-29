@@ -26,6 +26,13 @@ definitions:
     - phoneCountryCode
     - phoneNumber
     type: object
+  model.RowsAffectedModel:
+    properties:
+      data:
+        example: 1
+        format: int64
+        type: integer
+    type: object
   model.UpdateUserBody:
     properties:
       birthday:
@@ -54,6 +61,18 @@ definitions:
       updatedAt:
         type: string
     type: object
+  model.UserListResponseObject:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+    type: object
+  model.UserResponseObject:
+    properties:
+      data:
+        $ref: '#/definitions/model.User'
+    type: object
 host: localhost:7011
 info:
   contact:
@@ -77,7 +96,7 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/model.User'
+            $ref: '#/definitions/model.UserListResponseObject'
         "403":
           description: err.Error()
           schema:
@@ -121,9 +140,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: success
           schema:
-            $ref: '#/definitions/model.User'
+            $ref: '#/definitions/model.RowsAffectedModel'
       summary: delete user
       tags:
       - users
@@ -143,7 +162,7 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/model.User'
+            $ref: '#/definitions/model.UserResponseObject'
         "404":
           description: record not found
           schema:
@@ -173,7 +192,7 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/model.User'
+            $ref: '#/definitions/model.RowsAffectedModel'
       summary: update user
       tags:
       - users

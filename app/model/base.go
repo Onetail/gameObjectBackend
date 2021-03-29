@@ -1,7 +1,6 @@
 package model
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -18,18 +17,11 @@ type BaseModel struct {
 	UpdatedAt time.Time `gorm:"column:updatedAt;index:idx_time;" sql:"DEFAULT:current_timestamp ON update current_timestamp"`
 }
 
-type DateTime time.Time
-
-func (t User) MarshalJSON() ([]byte, error) {
-	type TmpJSON User
-	return json.Marshal(&struct {
-		TmpJSON
-		Birthday DateTime `json:"birthday"`
-	}{
-		TmpJSON:  (TmpJSON)(t),
-		Birthday: DateTime(t.Birthday),
-	})
+type RowsAffectedModel struct {
+	Data int `json:"data" example:"1" format:"int64"`
 }
+
+type DateTime time.Time
 
 func (t *DateTime) UnmarshalJSON(data []byte) (err error) {
 	// 空值不進行解析

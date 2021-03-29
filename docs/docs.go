@@ -48,7 +48,7 @@ var doc = `{
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/model.UserListResponseObject"
                         }
                     },
                     "403": {
@@ -118,7 +118,7 @@ var doc = `{
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/model.UserResponseObject"
                         }
                     },
                     "404": {
@@ -152,9 +152,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/model.RowsAffectedModel"
                         }
                     }
                 }
@@ -193,7 +193,7 @@ var doc = `{
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/model.RowsAffectedModel"
                         }
                     }
                 }
@@ -239,6 +239,16 @@ var doc = `{
                 }
             }
         },
+        "model.RowsAffectedModel": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                }
+            }
+        },
         "model.UpdateUserBody": {
             "type": "object",
             "properties": {
@@ -279,6 +289,25 @@ var doc = `{
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "model.UserListResponseObject": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.User"
+                    }
+                }
+            }
+        },
+        "model.UserResponseObject": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.User"
                 }
             }
         }
