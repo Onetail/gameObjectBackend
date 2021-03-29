@@ -10,7 +10,7 @@ services:
       context: . # Use an image built from the specified dockerfile in the current directory.
       dockerfile: docker/golang/Dockerfile
     ports:
-      - "7011:7011" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      - "7019:7019" # Forward the exposed port 8080 on the container to port 8080 on the host machine
     restart: unless-stopped   
     environment: 
       GO_ENV: production
