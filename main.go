@@ -2,7 +2,8 @@ package main
 
 import (
 	"gameObjectBackend/app"
-	"gameObjectBackend/app/controller"
+	"gameObjectBackend/app/controller/account"
+	"gameObjectBackend/app/controller/user"
 )
 
 // @title GameObjectBackend
@@ -23,8 +24,11 @@ func main() {
 	app := app.App{}
 	app.Init()
 
-	user := controller.Users{}
+	user := user.Users{}
 	user.Init(app.HTTPServer)
+
+	account := account.Accounts{}
+	account.Init(app.HTTPServer)
 
 	// Start application
 	app.Run()

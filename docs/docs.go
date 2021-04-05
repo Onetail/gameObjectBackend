@@ -31,6 +31,46 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/accounts/signin": {
+            "post": {
+                "description": "回傳 user token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "get user token",
+                "parameters": [
+                    {
+                        "description": "參數",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.PostSigninBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserSignInResponseObject"
+                        }
+                    },
+                    "403": {
+                        "description": "err.Error()",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users/": {
             "get": {
                 "description": "取得 user 列表",
@@ -239,6 +279,21 @@ var doc = `{
                 }
             }
         },
+        "model.PostSigninBody": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "model.RowsAffectedModel": {
             "type": "object",
             "properties": {
@@ -308,6 +363,14 @@ var doc = `{
             "properties": {
                 "data": {
                     "$ref": "#/definitions/model.User"
+                }
+            }
+        },
+        "model.UserSignInResponseObject": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
                 }
             }
         }

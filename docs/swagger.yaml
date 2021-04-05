@@ -26,6 +26,16 @@ definitions:
     - phoneCountryCode
     - phoneNumber
     type: object
+  model.PostSigninBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   model.RowsAffectedModel:
     properties:
       data:
@@ -73,6 +83,11 @@ definitions:
       data:
         $ref: '#/definitions/model.User'
     type: object
+  model.UserSignInResponseObject:
+    properties:
+      data:
+        type: object
+    type: object
 host: localhost:7011
 info:
   contact:
@@ -85,6 +100,32 @@ info:
   title: GameObjectBackend
   version: 1.0.0
 paths:
+  /api/v1/accounts/signin:
+    post:
+      consumes:
+      - application/json
+      description: 回傳 user token
+      parameters:
+      - description: 參數
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.PostSigninBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/model.UserSignInResponseObject'
+        "403":
+          description: err.Error()
+          schema:
+            type: string
+      summary: get user token
+      tags:
+      - accounts
   /api/v1/users/:
     get:
       consumes:

@@ -20,6 +20,22 @@ type UserListResponseObject struct {
 	Data []User
 }
 
+type UserSignInResponseObject struct {
+	Data struct {
+		token string
+	}
+}
+
+type JwtUserBody struct {
+	Email            string   `json:"email" binding:"required"`
+	PhoneCountryCode string   `json:"phoneCountryCode" binding:"required"`
+	PhoneNumber      string   `json:"phoneNumber" binding:"required"`
+	Nickname         string   `json:"nickname" binding:"required"`
+	Birthday         DateTime `json:"birthday" binding:"required"`
+	Gender           string   `json:"gender" binding:"required"`
+	Region           string   `json:"region,omitempty"`
+}
+
 type CreateUserBody struct {
 	Email            string   `json:"email" binding:"required"`
 	Password         string   `json:"password" binding:"required"`
@@ -33,6 +49,11 @@ type CreateUserBody struct {
 type UpdateUserBody struct {
 	Nickname string `json:"nickname,omitempty"`
 	Birthday string `json:"birthday,omitempty"`
+}
+
+type PostSigninBody struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 func (t User) MarshalJSON() ([]byte, error) {
