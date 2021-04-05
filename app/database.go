@@ -50,6 +50,10 @@ func (database *Database) Init() {
 	user2 := &model.User{Nickname: "test2", PhoneNumber: "123456789"}
 	db.Create(&user1)
 	db.Create(&user2)
+	userLogin1 := &model.UserLogin{Email: "paosong91", Password: "123456"}
+	userLogin2 := &model.UserLogin{Email: "test", Password: "123456"}
+	db.Create(&userLogin1)
+	db.Create(&userLogin2)
 }
 
 func (database *Database) GetDb() *gorm.DB {
